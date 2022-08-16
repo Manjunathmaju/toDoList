@@ -48,3 +48,5 @@ function addTextToList(text) {
 //     }
 //     return;
 // }
+
+//face-2 add the count field, like count the number of tasks completed and uncompleted and total number of tasks in todolist
