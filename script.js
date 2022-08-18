@@ -6,11 +6,11 @@ const values = {
     taskDone: 0,
     taskPending: 0,
 }
-document.getElementById('addBtn').addEventListener('click', init)
+document.getElementsByClassName('addBtn').addEventListener('click', init)
 
 
 function init() {
-    let textValue = document.getElementById('addTask').value;
+    let textValue = document.getElementsByClassName('addTask').value;
     if (textValue != '') {
         values.totalTask += 1;
         alert(values.totalTask)
@@ -24,7 +24,8 @@ function addTextToList(task) {
     let newElem2 = newElement('li', { 'class': 'task', 'id': values.totalTask + 1 })
     let data = document.createTextNode(task);
     let newElem1 = newElement('input', { 'type': 'checkbox', 'id': values.totalTask })
-    appendElements(newElem2, data, newElem1)
+    let delBtn = newElement('input', { 'type': 'button', 'id': values.totalTask + 2 })
+    appendElements(newElem2, delBtn, data, newElem1)
     let domElem = getElement('class', 'taskList')
     appendElements(domElem, appendElements(newElem, newElem2))
 }
