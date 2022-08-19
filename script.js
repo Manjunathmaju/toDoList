@@ -1,41 +1,40 @@
-//dataStorage
-//init function
-//action function
 (() => {
     const values = {
         totalTask: 0,
         taskDone: 0,
-        taskPending: 0,
+        taskPending: 0
     }
+
+    let store = {}
     document.querySelector('.addBtn').addEventListener('click', init)
-    // let idval = e.target.id
-    // console.log(idval)
+    document.querySelector('.getHistoryTask').addEventListener('click', getLocalScorage)
 
-
-    function addDeleteBtn() {
-        console.log('your are inside addDeleteBtn function')
+    function addDeleteBtn(elem) {
+        alert('you clicked the check box')
     }
 
     function init() {
         const textValue = document.querySelector('.addTask').value;
+        console.log(Object.values(localStorage).size);
         if (textValue !== '') {
-            values.totalTask += 1;
-            alert(values.totalTask)
+            values.totalTask += 1
+            store[Date.now()] = { id: Date.now(), task: textValue, status: false }
+            setLocalStorage('localObj', JSON.stringify(store));
             addTextToList(textValue)
-            // counterUpdate()
         }
     }
 
     function addTextToList(task) {
-        let newElem = newElement('ul', { 'class': 'allTask' })
-        let newElem2 = newElement('li', { 'class': 'task', 'id': values.totalTask + 1 })
+        let ulElement = newElement('ul', { 'class': 'allTask' })
+        let liElement = newElement('li', { 'class': 'task', 'id': values.totalTask })
         const data = document.createTextNode(task);
-        const newElem1 = newElement('input', { 'type': 'checkbox', 'class': 'taskStatus', 'id': values.totalTask })
-        const delBtn = newElement('input', { 'type': 'button', 'value': 'delete', 'id': values.totalTask + 2 })
-        appendElements(newElem2, data, newElem1, delBtn)
-        const domElem = getElement('class', '.taskList')
-        appendElements(newElem, newElem2)
-        appendElements(domElem, newElem)
+        const checkboxElement = newElement('input', { 'type': 'checkbox', 'class': 'taskStatus' })
+        checkboxElement.addEventListener('click', (e) => { addDeleteBtn(e) })
+        const delBtn = newElement('input', { 'class': 'taskDeletBtn', 'type': 'button', 'value': 'delete', 'id': values.totalTask + 1 })
+        appendElements(liElement, data, checkboxElement, delBtn)
+        const domElement = getElement('class', '.taskList')
+        appendElements(ulElement, liElement)
+        appendElements(domElement, ulElement)
     }
 
     function getElement(prop, value) {
@@ -62,14 +61,19 @@
             parentNode.appendChild(appChild[i])
         }
     }
-    document.querySelectorAll('.taskStatus').addEventListener('click', addDeleteBtn)
 
     function setLocalStorage(key, value) {
-        localStorage.setItem(key, value)
+        localStorage.setItem(key, value);
     }
 
     function getLocalScorage() {
-
+        let localStorageDate = JSON.parse(localStorage.getItem('localObj'));
+        for (const key in localStorageDate) {
+            if (localStorageDate.hasOwnProperty.call(localStorageDate, key)) {
+                let storedText = localStorageDate[key].task
+                addTextToList(storedText)
+            }
+        }
     }
 })();
 
