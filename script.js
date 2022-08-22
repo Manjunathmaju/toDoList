@@ -12,7 +12,6 @@
 
     function init() {
         const textValue = document.querySelector('.addTask').value;
-        // console.log('Object.values(localStorage).size' + !textValue);
         if (!textValue) {
             alert('enter the task!')
         } else {
@@ -45,7 +44,6 @@
     // alert('you clicked the check box');
 
     function addTextToList(task, uniqueNo) {
-        // console.log(uniqueNo)
         const ulElement = createElementFunction('ul', { 'class': 'allTask' });
         const liElement = createElementFunction('li', { 'class': 'task', 'id': values.totalTask });
         const data = document.createTextNode(task);
@@ -57,7 +55,6 @@
         appendElements(ulElement, liElement);
         appendElements(domElement, ulElement);
         let temp = document.querySelectorAll('.taskStatus');
-        // console.log(temp) rendring
     }
 
     function getElement(prop, value) {
@@ -98,9 +95,6 @@
             }
         }
     }
-
-
-
 })();
 
 //task-1
