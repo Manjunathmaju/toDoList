@@ -1,0 +1,19 @@
+.addTaskToList {
+    margin-left: 3%;
+}
+
+.taskTitle {
+    margin-left: 5%;
+}
+
+.task {
+    list-style-type: none;
+}
+
+.taskList {
+    border: solid 1px black;
+}
+
+/* .taskDeletBtn {
+    visibility: hidden;
+} */
