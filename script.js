@@ -7,7 +7,7 @@
 
     let store = {};
     document.querySelector('.addBtn').addEventListener('click', init);
-    document.querySelector('.getHistoryTask').addEventListener('click', getLocalScorage);
+    document.querySelector('.getHistoryTask').addEventListener('click', getLocalStorage);
 
 
     function init() {
@@ -89,7 +89,7 @@
         localStorage.setItem(key, value);
     }
 
-    function getLocalScorage() {
+    function getLocalStorage() {
         const localStorageDate = JSON.parse(localStorage.getItem('localObj'));
         for (const key in localStorageDate) {
             if (localStorageDate.hasOwnProperty.call(localStorageDate, key)) {
