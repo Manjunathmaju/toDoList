@@ -9,40 +9,63 @@
     document.querySelector('.addBtn').addEventListener('click', init);
     document.querySelector('.getHistoryTask').addEventListener('click', getLocalScorage);
 
-    function addDeleteBtn(elem) {
-        alert('you clicked the check box');
-    };
 
     function init() {
         const textValue = document.querySelector('.addTask').value;
-        console.log(Object.values(localStorage).size);
-        if (textValue !== '') {
+        // console.log('Object.values(localStorage).size' + !textValue);
+        if (!textValue) {
+            alert('enter the task!')
+        } else {
             values.totalTask += 1;
-            store[Date.now()] = { id: Date.now(), task: textValue, status: false };
+            const randomNo = Date.now();
+            store[randomNo] = { id: randomNo, task: textValue, status: false };
             setLocalStorage('localObj', JSON.stringify(store));
-            addTextToList(textValue);
+            addTextToList(textValue, randomNo);
         }
     }
 
-    function addTextToList(task) {
-        const ulElement = newElement('ul', { 'class': 'allTask' });
-        const liElement = newElement('li', { 'class': 'task', 'id': values.totalTask });
+    function statusUpdate(elem) {
+        const taskId = elem.target.parentNode;
+        console.log(elem)
+        const currentElementId = elem.target.id
+        const localStorageDate = JSON.parse(localStorage.getItem('localObj'));
+        console.log(localStorageDate[key])
+        for (const key in localStorageDate) {
+            // console.log(currentElementId)
+            if (localStorageDate.hasOwnProperty.call(localStorageDate, key)) {
+                const storedId = localStorageDate[key].id;
+                // console.log(storedId)
+                if (storedId === Number(currentElementId)) {
+                    localStorageDate[key].status = true;
+                    break;
+                }
+            }
+        }
+    }
+    // alert('you clicked the check box');
+
+    function addTextToList(task, uniqueNo) {
+        // console.log(uniqueNo)
+        const ulElement = createElementFunction('ul', { 'class': 'allTask' });
+        const liElement = createElementFunction('li', { 'class': 'task', 'id': values.totalTask });
         const data = document.createTextNode(task);
-        const checkboxElement = newElement('input', { 'type': 'checkbox', 'class': 'taskStatus' });
-        checkboxElement.addEventListener('click', (e) => { addDeleteBtn(e) });
-        const delBtn = newElement('input', { 'class': 'taskDeletBtn', 'type': 'button', 'value': 'delete', 'id': values.totalTask + 1 });
+        const checkboxElement = createElementFunction('input', { 'type': 'checkbox', 'id': uniqueNo, 'class': 'taskStatus' });
+        checkboxElement.addEventListener('click', (e) => { statusUpdate(e) });
+        const delBtn = createElementFunction('input', { 'class': 'taskDeletBtn', 'type': 'button', 'value': 'delete', 'id': values.totalTask + 1 });
         appendElements(liElement, data, checkboxElement, delBtn);
-        const domElement = getElement('class', '.taskList');
+        const domElement = getElement('class', 'taskList');
         appendElements(ulElement, liElement);
         appendElements(domElement, ulElement);
+        let temp = document.querySelectorAll('.taskStatus');
+        // console.log(temp) rendring
     }
 
     function getElement(prop, value) {
-        const val = (prop === 'id') ? document.querySelector(value) :
-            (prop === 'class') ? document.querySelector(value) : alert('enter class name or id name!!');
+        const val = (prop === 'id') ? document.querySelector(`#${value}`) :
+            (prop === 'class') ? document.querySelector(`.${value}`) : alert('enter class name or id name!!');
         return val;
     }
-    function newElement(value, addAtt) {
+    function createElementFunction(value, addAtt) {
         const element = document.createElement(value);
         return addAttributes(element, addAtt);//here have to check addAtt identifier is object 
     }
@@ -75,6 +98,9 @@
             }
         }
     }
+
+
+
 })();
 
 //task-1
