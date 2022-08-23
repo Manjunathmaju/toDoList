@@ -9,8 +9,12 @@
         addBtn: document.querySelector('.addBtn'),
         newTask: document.querySelector('.addTask'),
         getHistoryTasks: document.querySelector('.getHistoryTask'),
-        taskLists: document.querySelector('.taskList')
+        taskLists: document.querySelector('.taskList'),
+        totalCount: document.querySelector('.totalCountTasks'),
+        completedCount: document.querySelector('.completedCountTasks'),
+        pendingCount: document.querySelector('.pendingCountTasks'),
     };
+    window.onload = getLocalScorage();
 
     const storeOfCurrentTask = {};
     domRender.addBtn.addEventListener('click', init);
@@ -76,11 +80,11 @@
     }
 
 
-    function getElement(prop, value) {
-        const updatedProp = (prop === 'id') ? document.querySelector(`#${value}`) :
-            (prop === 'class') ? document.querySelector(`.${value}`) : alert('enter class name or id name!!');
-        return updatedProp;
-    }
+    // function getElement(prop, value) {
+    //     const updatedProp = (prop === 'id') ? document.querySelector(`#${value}`) :
+    //         (prop === 'class') ? document.querySelector(`.${value}`) : alert('enter class name or id name!!');
+    //     return updatedProp;
+    // }
 
     function createElementFunction(value, addAtt) {
         const element = document.createElement(value);//
@@ -102,19 +106,28 @@
         }
     }
 
-    window.onload(getLocalScorage())
     function getLocalScorage() {
         const localStorageDate = JSON.parse(localStorage.getItem('localObj'));
-
         for (const key in localStorageDate) {
             if (localStorageDate.hasOwnProperty.call(localStorageDate, key)) {
                 const storedText = localStorageDate[key].task;
-                const storedId = localStorageDate[key].id
-                const storedStatus = localStorageDate[key].status
+                const storedId = localStorageDate[key].id;
+                const storedStatus = localStorageDate[key].status;
+                storedStatus ? values.taskDone++ : values.taskPending++;
+                values.totalTask++;
                 addTextToList(storedText, storedId, storedStatus);
             }
         }
+        countTracker()
     }
+
+    function countTracker() {
+        domRender.totalCount.innerHTML = values.totalTask;
+        domRender.completedCount.innerHTML = values.taskDone;
+        domRender.pendingCount.innerHTML = values.taskPending;
+
+    }
+
 })();
 
 //task-1
