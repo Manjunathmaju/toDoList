@@ -10,16 +10,24 @@
     list-style-type: none;
 }
 
-.taskList {
-    border: solid 1px black;
-}
 
-.totalCountTasks,
-.completedCountTasks,
-.pendingCountTasks {
-    /* /* font-size: 200%; */
+
+.totalCount,
+.completedCount,
+.pendingCount {
     font-weight: 300;
     font-family: 'Courier New', Courier, monospace;
+    margin-left: 4%;
+}
+
+
+.completedCountLable {
+    color: green;
+}
+
+
+.pendingCountLable {
+    color: red;
 }
 
 /* .taskDeletBtn {

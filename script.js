@@ -4,34 +4,35 @@
         taskDone: 0,
         taskPending: 0
     };
+    const allTasksListObject = {};
+    const app = document.querySelector('.app');
 
     const domRender = {
-        addBtn: document.querySelector('.addBtn'),
-        newTask: document.querySelector('.addTask'),
-        getHistoryTasks: document.querySelector('.getHistoryTask'),
-        taskLists: document.querySelector('.taskList'),
-        totalCount: document.querySelector('.totalCountTasks'),
-        completedCount: document.querySelector('.completedCountTasks'),
-        pendingCount: document.querySelector('.pendingCountTasks'),
+        addBtn: app.querySelector('.addBtn'),
+        newTask: app.querySelector('.addTask'),
+        getHistoryTasks: app.querySelector('.getHistoryTask'),
+        taskLists: app.querySelector('.taskList'),
+        totalCount: app.querySelector('.totalCount'),
+        completedCount: app.querySelector('.completedCount'),
+        pendingCount: app.querySelector('.pendingCount'),
     };
-    window.onload = getLocalScorage();
 
-    const storeOfCurrentTask = {};
+    window.onload = getLocalScorage();
     domRender.addBtn.addEventListener('click', init);
-    domRender.getHistoryTasks.addEventListener('click', getLocalScorage);
+    // domRender.getHistoryTasks.addEventListener('click', getLocalScorage);
 
 
     function init() {
         const textValue = domRender.newTask.value;
         if (!textValue) {
-            alert('enter the task!')
+            alert('enter the task!');
         } else {
             values.totalTask += 1;
             const randomNo = Date.now();
-            storeOfCurrentTask[randomNo] = { id: randomNo, task: textValue, status: false };
+            allTasksListObject[randomNo] = { id: randomNo, task: textValue, status: false };
             addTextToList(textValue, randomNo);
         }
-        localStorage.setItem('localObj', JSON.stringify(storeOfCurrentTask));
+        localStorage.setItem('localObj', JSON.stringify(allTasksListObject));
     }
 
     function statusUpdate(elem) {
@@ -39,19 +40,18 @@
         const localStorageDate = JSON.parse(localStorage.getItem('localObj'));
         localStorageDate[taskId].status ? localStorageDate[taskId].status = false : localStorageDate[taskId].status = true;
         localStorage.setItem('localObj', JSON.stringify(localStorageDate));
-        console.log(localStorageDate[taskId].status);
 
     }
 
     function deleteTask(elem) {
-        const elementId = elem.target.id
-        const parentElementId = document.getElementById(elementId).parentElement.id
+        const elementId = elem.target.parentElement.id
+        // const parentElementId = app.querySelector(elementId);
+        // console.log(parentElementId);
         const localStorageDate = JSON.parse(localStorage.getItem('localObj'));
         const wantToDelete = confirm('do you want to delete')
-        if (wantToDelete === true) {
-            delete localStorageDate[parentElementId];
-        } else {
-            console.log('ok no problem');
+        if (wantToDelete) {
+            delete localStorageDate[elementId];
+            document.getElementById(elementId).remove();
         }
         localStorage.setItem('localObj', JSON.stringify(localStorageDate));
     }
@@ -66,14 +66,14 @@
         if (status === undefined) {
             checkboxElement = createElementFunction('input', { 'type': 'checkbox', 'id': uniqueNo / 1000, 'class': 'taskStatus' });
         } else if (status) {
-            checkboxElement = createElementFunction('input', { 'type': 'checkbox', 'id': uniqueNo, 'class': 'taskStatus', 'checked': true });//
+            checkboxElement = createElementFunction('input', { 'type': 'checkbox', 'id': uniqueNo, 'class': 'taskStatus', 'checked': true });
         } else {
-            checkboxElement = createElementFunction('input', { 'type': 'checkbox', 'id': uniqueNo, 'class': 'taskStatus' });//
+            checkboxElement = createElementFunction('input', { 'type': 'checkbox', 'id': uniqueNo, 'class': 'taskStatus' });
         }
 
         checkboxElement.addEventListener('click', (e) => { statusUpdate(e) });
-        const delBtn = createElementFunction('input', { 'class': 'taskDeletBtn', 'type': 'button', 'value': 'delete', 'id': values.totalTask + 1 });//
-        delBtn.addEventListener('click', (e) => deleteTask(e))
+        const delBtn = createElementFunction('input', { 'class': 'taskDeletBtn', 'type': 'button', 'value': 'delete', 'id': values.totalTask + 1 });
+        delBtn.addEventListener('click', (e) => deleteTask(e));
         appendElements(liElement, data, checkboxElement, delBtn);
         appendElements(ulElement, liElement);
         appendElements(domRender.taskLists, ulElement);
@@ -110,24 +110,19 @@
         const localStorageDate = JSON.parse(localStorage.getItem('localObj'));
         for (const key in localStorageDate) {
             if (localStorageDate.hasOwnProperty.call(localStorageDate, key)) {
-                const storedText = localStorageDate[key].task;
-                const storedId = localStorageDate[key].id;
-                const storedStatus = localStorageDate[key].status;
-                storedStatus ? values.taskDone++ : values.taskPending++;
+                localStorageDate[key].status ? values.taskDone++ : values.taskPending++;
                 values.totalTask++;
-                addTextToList(storedText, storedId, storedStatus);
+                addTextToList(localStorageDate[key].task, localStorageDate[key].id, localStorageDate[key].status);
             }
         }
-        countTracker()
+        countTracker();
     }
 
     function countTracker() {
         domRender.totalCount.innerHTML = values.totalTask;
         domRender.completedCount.innerHTML = values.taskDone;
         domRender.pendingCount.innerHTML = values.taskPending;
-
     }
-
 })();
 
 //task-1
@@ -136,3 +131,28 @@
 //count the checked tasks
 //task-3
 //push data to local storage
+
+// const Person = function (firstName, birthYear) {
+//     this.firstName = firstName;
+//     this.birthYear = birthYear;
+//     //never do like this
+//     // this.calcAge = function () {
+//     //     console.log
+//     // }
+
+
+//     console.log(this)
+// }
+
+// const jones = new Person('json', 2001);
+// const manju = new Person('json', 2001);
+// const jar = 'jar'
+// console.log(manju instanceof Person)//true
+// console.log(jar instanceof Person)//false
+// console.log(jones)
+
+
+ //new {} is created
+//  functio is called this={}
+// {} linked to prototype
+// function automatically return {}
