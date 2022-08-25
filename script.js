@@ -1,4 +1,6 @@
 // (() => {
+
+// import prepareTask from "./app";
 const values = {
     totalTask: 0,
     taskDone: 0,
@@ -10,7 +12,7 @@ const values = {
     set setTaskCompleted(value) { this.totalTask = value; },
     set setTotalTask(value) { return this.totalTask; }
 };
-
+let dataToLocal = {};
 const app = document.querySelector('.app');
 
 const domElements = {
@@ -34,60 +36,86 @@ const domElements = {
 
 function getlocalData() {
     const allTasks = JSON.parse(localStorage.getItem('myTasks'));
+    // console.log(Object.keys(allTasks))
+    return allTasks;
 }
 
-function setTaskToLocal(tasks) {
+// function setTaskToLocal(tasks) {
+//     localStorage.setItem('myTasks', JSON.stringify(tasks));
+// }
+
+function uniqueValue() { return Date.now() }
+
+function prepareValuesForLocal() {//change the function name
+    const id = uniqueValue()
+    dataToLocal[id] = { 'id': id, 'task': getNewTask(), 'status': false };
+    return dataToLocal;
+}
+function passValueForLocal(tasks) {
     localStorage.setItem('myTasks', JSON.stringify(tasks));
 }
-// window.onload = getLocalScorage();
-// domElements.getTextBtn.addEventListener('click', init);
-// domRender.getHistoryTasks.addEventListener('click', getLocalScorage);
-function uniqueValue() { return Date.now() }
-function localData() { return { [uniqueValue()]: { id: uniqueValue(), task: 'value', status: false } } };
+// console.log(dataToLocal);
 
 
 function init() {
     registerEventHandlers();
-
 }
 
 function registerEventHandlers() {
     buttonsEventHandler();
-    // localStorageHandler();
 }
 
 function localStorageHandler() {
-    const dataToLocal = localData();
+    const obj = getlocalData();
+    onAddHistoryTaskClick(obj);
+}
+
+
+function onAddHistoryTaskClick(myTasks) {//change this function name
+    const objkeys = Object.keys(myTasks);
+    objkeys.forEach(key => {
+        const element = prepareTask(myTasks[key].task);
+        insertTaskIntoDOM(element);
+    });
 }
 
 function buttonsEventHandler() {
-    domElements.getTextBtn.addEventListener('click', onAddTaskClick)
-    domElements.getTaskHistory.addEventListener('click',)
-
+    domElements.getTextBtn.addEventListener('click', taskActions)
+    domElements.getTaskHistory.addEventListener('click', localStorageHandler)
 }
 
 function getNewTask() {
     return domElements.getnewText.value;
+}
 
+function taskActions() {
+    const value = prepareValuesForLocal();
+    passValueForLocal(value);
+    onAddTaskClick();
 }
 
 function onAddTaskClick() {
     const value = getNewTask();
     if (value) {
-        const element = getTaskNode(document.createTextNode(value));
+        const element = prepareTask(value);
         insertTaskIntoDOM(element);
     }
 }
 
-function getTaskNode(value) {
-    return prepareTask(value);
-}
+// function getTaskNode(value) {
+//     return prepareTask(value);
+// }
 
+function insertTaskIntoDOM(node) {
+    domElements.getTaskLists.appendChild(node);
+}
 function prepareTask(value) {
-    const liElement = createEleme('li', { 'class': 'task' });
+    // const id = Object.keys(dataToLocal)
+    const task = document.createTextNode(value);
+    const liElement = createEleme('li', { 'class': 'task', });
     const taskDelBtn = createEleme('input', { 'type': 'button', 'class': 'taskDeleteBtn', 'value': 'delete' });
     const taskcheckbox = createEleme('input', { 'type': 'checkbox', 'class': 'taskcheckbox' });
-    appendElements(liElement, value, taskcheckbox, taskDelBtn);
+    appendElements(liElement, task, taskcheckbox, taskDelBtn);
     return liElement;
 
 
@@ -95,14 +123,9 @@ function prepareTask(value) {
 
 }
 
-function insertTaskIntoDOM(node) {
-    console.log(domElements.getTaskLists)
-    domElements.getTaskLists.appendChild(node);
-}
-
 function createEleme(value, addAtt) {
     const element = document.createElement(value);//
-    return addAttributes(element, addAtt);//here have to check addAtt identifier is object 
+    return addAttributes(element, addAtt);//here have to check addAtt identifier is object
 }
 
 function addAttributes(mainElement, setAtt) {
@@ -115,10 +138,25 @@ function addAttributes(mainElement, setAtt) {
 }
 
 function appendElements(parentNode, ...appChild) {
+    console.log(parentNode)
     for (let i = appChild.length - 1; i >= 0; i--) {
+        console.log(appChild[i])
         parentNode.appendChild(appChild[i]);
     }
 }
 
 init();
+
+
+
+
+
+
+
+
+
+
+
+
+
 
