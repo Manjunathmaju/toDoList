@@ -48,7 +48,7 @@ function uniqueValue() { return Date.now() }
 
 function prepareValuesForLocal() {//change the function name
     const id = uniqueValue()
-    dataToLocal[id] = { 'id': id, 'task': getNewTask(), 'status': false };
+    dataToLocal[id] = { 'id': id, 'task': getObjectIdValue.getNewTask(), 'status': false };
     return dataToLocal;
 }
 function passValueForLocal(tasks) {
@@ -70,7 +70,6 @@ function localStorageHandler() {
     onAddHistoryTaskClick(obj);
 }
 
-
 function onAddHistoryTaskClick(myTasks) {//change this function name
     const objkeys = Object.keys(myTasks);
     objkeys.forEach(key => {
@@ -80,22 +79,30 @@ function onAddHistoryTaskClick(myTasks) {//change this function name
 }
 
 function buttonsEventHandler() {
-    domElements.getTextBtn.addEventListener('click', taskActions)
-    domElements.getTaskHistory.addEventListener('click', localStorageHandler)
+    domElements.getTextBtn.addEventListener('click', taskActions);
+    domElements.getTaskHistory.addEventListener('click', localStorageHandler);
 }
 
-function getNewTask() {
-    return domElements.getnewText.value;
-}
+
+const getObjectIdValue = {
+    getNewTask() {
+        return domElements.getnewText.value;
+    },
+    getTaskId() {
+        console.log(dataToLocal);
+    }
+};
 
 function taskActions() {
     const value = prepareValuesForLocal();
     passValueForLocal(value);
-    onAddTaskClick();
+    const id = Object.keys(value)
+    onAddTaskClick(id[-1]);
 }
 
 function onAddTaskClick() {
-    const value = getNewTask();
+    const value = getObjectIdValue.getNewTask();
+    getObjectIdValue.getTaskId;
     if (value) {
         const element = prepareTask(value);
         insertTaskIntoDOM(element);
@@ -117,10 +124,6 @@ function prepareTask(value) {
     const taskcheckbox = createEleme('input', { 'type': 'checkbox', 'class': 'taskcheckbox' });
     appendElements(liElement, task, taskcheckbox, taskDelBtn);
     return liElement;
-
-
-    // return appendElements(domElements.getTaskLists, task)
-
 }
 
 function createEleme(value, addAtt) {
@@ -129,8 +132,8 @@ function createEleme(value, addAtt) {
 }
 
 function addAttributes(mainElement, setAtt) {
-    const key = Object.keys(setAtt);//
-    const value = Object.values(setAtt);//
+    const key = Object.keys(setAtt);
+    const value = Object.values(setAtt);
     for (let i = key.length - 1; i >= 0; i--) {
         mainElement.setAttribute(`${key[i]}`, `${value[i]}`);
     }
@@ -138,9 +141,7 @@ function addAttributes(mainElement, setAtt) {
 }
 
 function appendElements(parentNode, ...appChild) {
-    console.log(parentNode)
     for (let i = appChild.length - 1; i >= 0; i--) {
-        console.log(appChild[i])
         parentNode.appendChild(appChild[i]);
     }
 }
