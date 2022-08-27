@@ -1,3 +1,23 @@
+const getObjectIdValue = {
+    getNewTask() {
+        return domElements.getnewText.value;
+    },
+    getTaskId() {
+        const id = Object.keys(newTasksObj);
+        console.log(newTasksObj[id[id.length - 1]]);
+        return id[id.length - 1];
+    }
+};
+
+function prepareValuesForLocal() {
+    const id = uniqueValue();
+    newTasksObj[id] = { 'id': id, 'task': getObjectIdValue.getNewTask(), 'status': false };
+    return newTasksObj;
+}
+
+function uniqueValue() { return Date.now() }
+
+
 export default function prepareTask(value) {
     // const id = Object.keys(dataToLocal)
     const liElement = createEleme('li', { 'class': 'task', 'id': 'id[-1]' });
