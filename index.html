@@ -8,23 +8,34 @@
     <title>Document</title>
 </head>
 
+
 <body>
-    <div class="masterDiv">
-        <div class="addTaskToList">
+    <script src="./view.js" type="module"></script>
+    <div class="app">
+        <div class="newTaskDiv">
             <h2 class="taskTitle"> Todolist </h2>
-            <input type="text" class="addTask" placeholder="enter the task">
+            <input type="text" class="newTask" placeholder="enter the task">
             <input type="button" value="add" class="addBtn">
         </div>
         <div class="taskList">
 
         </div>
         <div class="taskTraker">
-            <input type="button" value="view history" class="getHistoryTask">
+            <input type="button" value="view history" class="taskHistory">
+            <br>
+            <br>
+            <label class="totalCountLable"></labelclass>"Total Tasks"</label>
+            <p class="totalCount">0</p>
+            <label class="completedCountLable">"Completed Tasks"</label>
+            <p class="completedCount">0</p>
+            <label class="pendingCountLable">"Pending Tasks" </label>
+            <p class="pendingCount">0</p>
         </div>
     </div>
-
+    
 </body>
-<script src="./script.js"></script>
+<!-- <script src="./script.js"></script> -->
+<script src="./view.js" type="module"></script>
 <link rel="stylesheet" href="./style.css">
 
 </html>
