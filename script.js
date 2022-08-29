@@ -164,12 +164,7 @@
     function deleteTask(element){
         let taskKeys=Object.keys(newTasksObject);
         if(taskKeys.includes(getElemetnAttributs.getParentId(element))){
-            console.log(newTasksObject[taskKeys].status)
-            if(newTasksObject[taskKeys].status){
-                newTasksObject[taskKeys].status=false;
-            }else{
-                newTasksObject[taskKeys].status=true;
-            }
+            delete  newTasksObject[taskKeys];
         }
     }
     
