@@ -1,38 +1,69 @@
-const values = {
-    totalTask: 0,
-    taskDone: 0,
-    taskPending: 0,
-    get getTotalTasks() { return this.totalTask; },
-    get getTaskCompleted() { return this.taskDone; },
-    get getTaskPending() { return this.taskPending; },
-    set setTotalTasks(value) { this.totalTask = value; },
-    set setTaskCompleted(value) { this.taskDone = value; },
-    set setTotalTask(value) { return this.taskPending = value; }
-};
-let newTasksObj = {};
-let localTasksObj = {};
-const app = document.querySelector('.app');
+import { domElements, getObjectIdValue, insertTaskIntoDOM, prepareTask, onAddHistoryTaskClick, updateStatus, updateTheLocal } from "./app.js";
+import { passValueForLocal, prepareValuesForLocal, getlocalData } from "./local-storage.js";
 
-const domElements = {
-    textBtn: app.querySelector('.addBtn'),
-    newTask: app.querySelector('.newTask'),
-    taskHistory: app.querySelector('.getHistoryTask'),
-    taskLists: app.querySelector('.taskList'),
-    totalCount: app.querySelector('.totalCount'),
-    completedCount: app.querySelector('.completedCount'),
-    pendingCount: app.querySelector('.pendingCount'),
-    taskHistory: app.querySelector('.taskHistory'),
-    get getTextBtn() { return this.textBtn },
-    get getnewText() { return this.newTask },
-    get gettaskHistory() { return this.taskHistory },
-    get getTaskLists() { return this.taskLists },
-    get getTotalCount() { return this.totalCount },
-    get getCompletedCount() { return this.completedCount },
-    get getPendingCount() { return this.pendingCount },
-    get getTaskHistory() { return this.taskHistory }
-};
+let isLocalStorageInvoked = false;
+export let newTasksObj = {};
 
-function getlocalData() {
-    const allTasks = JSON.parse(localStorage.getItem('myTasks'));
-    return allTasks;
+function init() {
+    // historyTasksHandler();
+    registerEventHandlers();
+    // updateTasksCountStatus();
 }
+// function updateTasksCountStatus() {
+//     alert('hi i am here !')
+// }
+
+function registerEventHandlers() {
+    buttonsEventHandel();
+}
+
+function buttonsEventHandel() {
+
+    domElements.getTextBtn.addEventListener('click', addTaskActions);
+    domElements.getTaskHistory.addEventListener('click', localStorageHandler);
+
+}
+function localStorageHandler() {
+    console.log(getlocalData());
+    console.log(newTasksObj)
+
+    newTasksObj = { ...getlocalData() };
+    console.log(newTasksObj)
+    // const newTasksObj = getlocalData();
+    if (newTasksObj) {
+        if (!isLocalStorageInvoked) {
+            isLocalStorageInvoked = true;
+            onAddHistoryTaskClick(newTasksObj);
+        }
+    } else { alert('YOU DON`T HAVE TASKS HISTORY!!'); }
+}
+
+// function addTasksToObject(obj){
+//     let keys=Object.keys(obj)
+//     keys.forEach(id=>{newTasksObj[id]=obj[id]})
+// }
+
+function addTaskActions() {
+    // prepareTask(manju, 1234353353, true);
+
+    const value = getObjectIdValue.getNewTask();
+    if (value) {
+        const objectForLocal = prepareValuesForLocal();
+        passValueForLocal(objectForLocal);
+        onAddTaskClick(value);
+    }
+}
+
+function onAddTaskClick(task) {
+    const id = getObjectIdValue.getTaskId();
+    const element = prepareTask(task, id, false);
+    insertTaskIntoDOM(element);
+
+}
+
+function taskStatusUpdateHandler(e) {
+    updateStatus(elementPropProvider.parentId(e));
+    updateTheLocal();
+}
+
+init();
